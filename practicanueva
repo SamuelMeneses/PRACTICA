@@ -212,8 +212,8 @@ def buscar_libros_por_genero(lista_libros):
 
     if libros_encontrados.length > 0:
         print(f"Se encontraron {libros_encontrados.length} libros del género '{genero_libro}':")
-        for libro in libros_encontrados:
-            print(libro)
+        for i in libros_encontrados:
+            print(i)
     else:
         print(f"No se encontraron libros de '{genero_libro}'.")
 
@@ -265,8 +265,8 @@ def listar_libros_disponibles(lista_libros):
 
     if libros_disponibles.length > 0:
         print("La lista de los libros disponibles para alquilar:")
-        for libro in libros_disponibles:
-            print(libro)
+        for i in libros_disponibles:
+            print(i)
     else:
         print("No hay libros disponibles para alquilar")
 
@@ -281,8 +281,8 @@ def listar_libros_alquilados(lista_libros):
 
     if libros_alquilados.length > 0:
         print("Lista de libros alquilados:")
-        for libro in libros_alquilados:
-            print(libro)
+        for i in libros_alquilados:
+            print(i)
     else:
         print("No hay libros alquilados en este momento")
 
@@ -298,8 +298,8 @@ def listar_libros_disponibles_por_genero(lista_libros):
 
     if libros_disponibles.length > 0:
         print(f"Lista de libros disponibles del género '{genero}' para alquilarlos es:")
-        for libro in libros_disponibles:
-            print(libro)
+        for i in libros_disponibles:
+            print(i)
     else:
         print(f"No hay libros de '{genero}' disponibles para alquilar")
 
@@ -341,9 +341,9 @@ def alquilar_libro_por_genero(lista_libros):
 
         opcion = int(input("Seleccione el número del libro que desea alquilar: "))
         if 1 <= opcion <= libros_disponibles.length:
-            selected_node = libros_disponibles.get(opcion - 1)
-            selected_node.value.alquilado = True
-            print(f"Ha alquilado el libro '{selected_node.value.titulo}'")
+            selecionado_node = libros_disponibles.get(opcion - 1)
+            selecionado_node.value.alquilado = True
+            print(f"Ha alquilado el libro '{selecionado_node.value.titulo}'")
         else:
             print("Opción inválida")
     else:
@@ -401,30 +401,37 @@ def ingreso_total_alquileres(lista_libros):
 
 def intercambiar_libros_deteriorados(lista_libros):
     titulo_deteriorado = input("Ingrese el título del libro deteriorado: ")
+
+    id_nuevo = input("Ingrese el ID del libro nuevo para reemplazarlo: ")
     titulo_nuevo = input("Ingrese el título del libro nuevo para reemplazarlo: ")
+    autor_nuevo = input("Ingrese el autor del libro nuevo: ")
+    genero_nuevo = input("Ingrese el género del libro nuevo: ")
+    ano_publicacion_nuevo = input("Ingrese el año de publicación del libro nuevo: ")
+    tarifa_diaria_nuevo = input("Ingrese la tarifa diaria del libro nuevo para su alquiler: ")
+
+    nuevo_libro = Libro(id_nuevo, genero_nuevo, autor_nuevo, titulo_nuevo, ano_publicacion_nuevo, tarifa_diaria_nuevo)
+    
 
     current_node = lista_libros.head
     index_deteriorado = -1
-    index_nuevo = -1
     index = 0
 
     while current_node is not None:
         if current_node.value.titulo == titulo_deteriorado:
             index_deteriorado = index
-        elif current_node.value.titulo == titulo_nuevo:
-            index_nuevo = index
+            break
         current_node = current_node.next
         index += 1
 
-    if index_deteriorado == -1 or index_nuevo == -1:
-        print("Uno o ambos libros no fueron encontrados en la biblioteca")
+    if index_deteriorado == -1:
+        print("El libro deteriorado no fue encontrado en la biblioteca")
         return
 
-    temp_node = lista_libros.get(index_deteriorado).value
-    lista_libros.get(index_deteriorado).value = lista_libros.get(index_nuevo).value
-    lista_libros.get(index_nuevo).value = temp_node
+    lista_libros.remove(index_deteriorado)
+    lista_libros.append(nuevo_libro)
 
     print(f"Se intercambió el libro '{titulo_deteriorado}' por el libro '{titulo_nuevo}'")
+
 
 
 lista_libros = DoubleLinkedList()
